@@ -1,11 +1,19 @@
 # raw-dialogs
 
+<p align="center" align-items="middle">	
+	<img width="25%" src="https://github.com/raw-codes/raw-dialogs/blob/master/images/alert.png" />
+	<img width="25%" src="https://github.com/raw-codes/raw-dialogs/blob/master/images/prompt.png" />
+	<br />
+	<img width="25%" src="https://github.com/raw-codes/raw-dialogs/blob/master/images/overlay.png" />
+	
+</p>
+
 ## Getting Started
 
 - [Installation](#installation)
 - [Basic Usage](#basic-usage)
 - [Props](#props)
-- [Styling](#Styling)
+- [Styling](#styling)
 
 ### Installation
 
@@ -18,95 +26,93 @@ $ npm i raw-dialogs --save
 ```javascript
 const dialogs = require("raw-dialogs");
 
-    //To create a simple alert set the props (JSON format) and pass it to createDialog() method
-    let props = {
-		type: "alert",
-		titlebar: "Alerting Application",
-		cssclass: "form-controls",
-		message: >Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>",
-		buttons: [ {
-				label: "Ok",
-				callbackfunction: alertMessage,
-				cssclass: "btn, btn-primary",
-			},	],
-	};
-	dialogs.createDialog(props);
+//To create a simple alert set the props (JSON format) and pass it to createDialog() method
+let props = {
+type: "alert",
+titlebar: "Alerting Application",
+cssclass: "form-controls",
+message: >Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>",
+buttons: [ {
+		label: "Ok",
+		callbackfunction: alertMessage,
+		cssclass: "btn, btn-primary",
+	},	],
+};
+dialogs.createDialog(props);
 
-	//To create a simple Prompt set the props (JSON format) and pass it to createDialog() method
-	//An Input will be shown to get the input
-	let props = {
-		type: "prompt",
-		titlebar: "Prompting Application",
-		message:
-			"<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>",
-		buttons: [ 	{
-				label: "Enter your name and click proceed",
-				callbackfunction: alertMessage,
-			},	],
-	};
-	dialogs.createDialog(props);
+/*To create a simple Prompt set the props (JSON format) and pass it to createDialog() method
+An Input will be shown to get the input*/
+let props = {
+type: "prompt",
+titlebar: "Prompting Application",
+message: "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>",
+buttons: [ {
+		label: "Enter your name and click proceed",
+		callbackfunction: alertMessage,
+	}, ],
+};
+dialogs.createDialog(props);
 
-	/*To create an overlay set the props (JSON format) and pass it to createDialog() method
-	This option is to allow us to create a lot complex forms.
-	*/
-	let props = {
-			type: "overlay",
-			titlebar: "Overlaying Application",
-			title: "Add New Client Information",
-			fullscreen: false,
-			help: "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
-			message: "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>",
-			form: {
-				cssclass: "form",
-				controls: [
-					{
-						type: "label",
-						caption: "Name",
-					},
-					{
-						type: "input",
-						inputtype: "text",
-						placeholder: "Placeholder that will be shown",
-						cssclass: "form-controls",
-					},
-					{
-						type: "label",
-						caption: "Age",
-					},
-					{
-						type: "select",
-						options:
-							"one, two, three, four, five, six, seven, eight, nine, ten",
-						values: "1, 2, 3,4,5,6,7,8, 9, 10",
-						cssclass: "form-controls, chosen-select",
-					},
-					{
-						type: "label",
-						caption: "Address",
-					},
-					{
-						type: "textarea",
-						rows: 5,
-						placeholder: "Placeholder that will be shown",
-						cssclass: "form-controls",
-					},
-				],
+/*To create an overlay set the props (JSON format) and pass it to createDialog() method
+This option is to allow us to create a lot complex forms.
+*/
+let props = {
+	type: "overlay",
+	titlebar: "Overlaying Application",
+	title: "Add New Client Information",
+	fullscreen: false,
+	help: "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
+	message: "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>",
+	form: {
+		cssclass: "form",
+		controls: [
+			{
+				type: "label",
+				caption: "Name",
 			},
-			buttons: [
-				{
-					label: "Ok",
-					callbackfunction: alertMessage,
-					cssclass: "btn, btn-primary",
-					focus: true,
-				},
-				{
-					label: "Cancel",
-					callbackfunction: alertMessage1,
-					cssclass: "btn, btn-warning",
-				},
-			],
-		};
-		dialogs.createDialog(props);
+			{
+				type: "input",
+				inputtype: "text",
+				placeholder: "Placeholder that will be shown",
+				cssclass: "form-controls", //CSS from Bootstrap
+			},
+			{
+				type: "label",
+				caption: "Age",
+			},
+			{
+				type: "select",
+				options: "< 15, 15-30, 31-45, 46-60, 61-75, > 75",
+				values: "1, 2, 3,4,5,6 ",
+				cssclass: "form-controls, chosen-select", //CSS from Bootstrap
+			},
+			{
+				type: "label",
+				caption: "Address",
+			},
+			{
+				type: "textarea",
+				rows: 5,
+				placeholder: "Placeholder that will be shown",
+				cssclass: "form-controls", //CSS from Bootstrap
+			},
+		],
+	},
+	buttons: [
+		{
+			label: "Ok",
+			callbackfunction: alertMessage,
+			cssclass: "btn, btn-primary", //Button CSS from Bootstrap
+			focus: true,
+		},
+		{
+			label: "Cancel",
+			callbackfunction: alertMessage1,
+			cssclass: "btn, btn-warning", //Button CSS from Bootstrap
+		},
+	],
+};
+dialogs.createDialog(props);
 
 ```
 
@@ -146,3 +152,9 @@ Feel free to [Contact me](mailto:moses.terence@outlook.com) or
 ## License
 
 Released under the [Mit License](https://opensource.org/licenses/MIT)
+
+## Screen shots
+
+<p align="center">
+	<img src="https://github.com/raw-codes/raw-dialogs/blob/master/images/raw-dialogs.gif" />
+</p>
