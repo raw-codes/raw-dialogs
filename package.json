@@ -1,16 +1,24 @@
 {
-	"name": "raw-dialogs",
-	"version": "1.0.3",
-	"description": "Package for creating Overlays, Prompts, and Alerts using vanilla JS",
-	"main": "index.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"keywords": [
-		"overlays",
-		"prompts",
-		"alerts"
-	],
-	"author": "raw-codes <moses.terence@outlook.com>",
-	"license": "ISC"
+  "name": "raw-dialogs",
+  "version": "1.0.4",
+  "description": "Package for creating Overlays, Prompts, and Alerts using vanilla JS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "overlays",
+    "prompts",
+    "alerts"
+  ],
+  "author": "raw-codes <moses.terence@outlook.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raw-codes/raw-overlays.git"
+  },
+  "bugs": {
+    "url": "https://github.com/raw-codes/raw-overlays/issues"
+  },
+  "homepage": "https://github.com/raw-codes/raw-overlays#readme"
 }

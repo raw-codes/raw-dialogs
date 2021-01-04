@@ -141,7 +141,7 @@ etc...)
 ## Reachout for feedback and comments
 
 Feel free to [Contact me](mailto:moses.terence@outlook.com) or
-[Create an issue](https://github.com/rishabhbhatia/react-native-awesome-alerts/issues/new)
+[Create an issue](https://github.com/raw-codes/raw-dialogs/issues/new)
 
 ## License
 
