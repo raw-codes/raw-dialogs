@@ -1,0 +1,188 @@
+<head> </head>
+<body>
+	<style>
+		.centerize {
+			display: flex;
+			flex-direction: column;
+			height: 80vh;
+			justify-content: space-between;
+			align-items: center;
+		}
+		.triangle-top-right {
+			width: 0px;
+			border-top: 130px solid orange;
+			border-left: 140px solid transparent;
+			top: 0px;
+			right: 0px;
+			position: absolute;
+		}
+		.btn {
+			width: 100px;
+			background-color: white;
+			border-radius: 5px;
+			padding: 5px;
+			border: 1px solid gray;
+		}
+	</style>
+	<div class="centerize">
+		<div class="triangle-top-right"></div>
+		<div class="centerize" style="justify-content: center">
+			<h1>raw-dialogs</h1>
+			<h5 style="color: red; font-style: italic; margin: 0">
+				Package for creating Overlays, Prompts, and Alerts using vanilla JS
+			</h5>
+		</div>
+		<div class="centerize">
+			<button id="btn_overlay" class="btn">Overlay</button>
+			<button id="btn_alert" class="btn">Alert</button>
+			<button id="btn_prompt" class="btn">Prompt</button>
+		</div>
+
+		<div class="centerize" style="justify-content: center">
+			<h1>raw-codes</h1>
+			<h5 style="color: red; font-style: italic; margin: 0">
+				<a
+					href="javascript:void(0)"
+					onclick="window.open('https://github.com/raw-codes/raw-dialogs','_blank')"
+				>
+					GitHub Repository
+				</a>
+			</h5>
+		</div>
+		<div
+			style="
+				border-bottom: 10px solid #038ad8;
+				width: 100vw;
+				position: fixed;
+				bottom: 1px;
+				margin: 0;
+			"
+		></div>
+		<div
+			style="
+				border-bottom: 5px solid orange;
+				width: 100vw;
+				position: fixed;
+				bottom: 1px;
+				margin-bottom: 5px;
+			"
+		></div>
+	</div>
+	<script>
+		const dialog = require("raw-dialogs");
+
+		function alertMessage() {
+			alert("Message back OK");
+		}
+
+		function alertMessage1() {
+			alert("Message back Cancel");
+		}
+
+		document
+			.getElementById("btn_overlay")
+			.addEventListener("click", function () {
+				let props = {
+					type: "overlay",
+					titlebar: "Sample Application",
+					title: "Add New Client Information",
+					fullscreen: false,
+					help:
+						"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
+					message:
+						"<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>",
+					// "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p><p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p><p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p><p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p><p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p><p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p><p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p><p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p><p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>",
+					form: {
+						cssclass: "styleclass",
+						controls: [
+							{
+								type: "label",
+								caption: "Name",
+							},
+							{
+								type: "input",
+								inputtype: "text",
+								placeholder: "Placeholder that will be shown",
+								cssclass: "ov-form-controls",
+							},
+							{
+								type: "label",
+								caption: "Age",
+							},
+							{
+								type: "select",
+								options:
+									"one, two, three, four, five, six, seven, eight, nine, ten",
+								values: "1, 2, 3,4,5,6,7,8, 9, 10",
+								cssclass: "ov-form-controls, chosen-select",
+							},
+							{
+								type: "label",
+								caption: "Address",
+							},
+							{
+								type: "textarea",
+								rows: 5,
+								placeholder: "Placeholder that will be shown",
+								cssclass: "ov-form-controls",
+							},
+						],
+					},
+					buttons: [
+						{
+							label: "Ok",
+							callbackfunction: alertMessage,
+							cssclass: "ov-button-normal",
+						},
+
+						{
+							label: "Cancel",
+							focus: true,
+							callbackfunction: alertMessage1,
+							cssclass: "ov-button-danger",
+						},
+					],
+				};
+
+				dialog.createDialog(props);
+			});
+
+		document.getElementById("btn_alert").addEventListener("click", function () {
+			let props = {
+				type: "alert",
+				titlebar: "Sample Application",
+				message:
+					"<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>",
+				buttons: [
+					{
+						label: "Alright Sam lets move ahead",
+						callbackfunction: alertMessage,
+						cssclass: "overlay-button-normal",
+					},
+				],
+			};
+
+			dialog.createDialog(props);
+		});
+
+		document
+			.getElementById("btn_prompt")
+			.addEventListener("click", function () {
+				let props = {
+					type: "prompt",
+					titlebar: "Prompting Application",
+					message:
+						"<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>",
+					buttons: [
+						{
+							label: "Click here to proceed",
+							callbackfunction: alertMessage,
+							cssclass: "overlay-button-normal",
+						},
+					],
+				};
+
+				dialog.createDialog(props);
+			});
+	</script>
+</body>

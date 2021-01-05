@@ -1,0 +1,16 @@
+{
+	"name": "raw-dialogs-example",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"electron": "electron ."
+	},
+	"author": "raw-codes <moses.terence@outlook.com>",
+	"license": "MIT",
+	"dependencies": {
+		"electron": "^11.1.1",
+		"raw-dialogs": "^1.0.4"
+	}
+}
