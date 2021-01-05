@@ -14,6 +14,8 @@
 - [Basic Usage](#basic-usage)
 - [Props](#props)
 - [Styling](#styling)
+- [Screen Shots](#screen-shots)
+- [Example](#example)
 
 ### Installation
 
@@ -153,8 +155,12 @@ Feel free to [Contact me](mailto:moses.terence@outlook.com) or
 
 Released under the [Mit License](https://opensource.org/licenses/MIT)
 
-## Screen shots
+## Screen-shots
 
 <p align="center">
 	<img src="https://github.com/raw-codes/raw-dialogs/blob/master/images/raw-dialogs.gif" />
 </p>
+
+
+## Example
+https://github.com/raw-codes/raw-dialogs/tree/master/example
