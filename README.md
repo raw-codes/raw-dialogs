@@ -34,12 +34,14 @@ let props = {
 	titlebar: "Alerting Application",
 	cssclass: "form-controls",
 	message: "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>",
-	buttons: [ {
+	buttons: [
+		{
 			label: "Ok",
-			callbackfunction: alertMessage,
+			callbackfunction: [alertMessage, alertMessage1],
 			cssclass: "btn, btn-primary", //CSS from Bootstrap
-		},	],
-	};
+		},
+	],
+};
 dialogs.createDialog(props);
 
 /*To create a simple Prompt set the props (JSON format) and pass it to createDialog() method
@@ -49,11 +51,13 @@ let props = {
 	titlebar: "Prompting Application",
 	message: "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>",
 	defaultvalue: "Default Value",
-	buttons: [ {
+	buttons: [
+		{
 			label: "Enter your name and click proceed",
-			callbackfunction: alertMessage,
-		}, ],
-	};
+			callbackfunction: [alertMessage],
+		},
+	],
+};
 dialogs.createDialog(props);
 
 /*To create an overlay set the props (JSON format) and pass it to createDialog() method
@@ -105,43 +109,42 @@ let props = {
 	buttons: [
 		{
 			label: "Ok",
-			callbackfunction: alertMessage,
+			callbackfunction: [alertMessage, alertMessage1],
 			cssclass: "btn, btn-primary", //Button CSS from Bootstrap
 			focus: true,
 		},
 		{
 			label: "Cancel",
-			callbackfunction: alertMessage1,
+			callbackfunction: [alertMessage1, alertMessage],
 			cssclass: "btn, btn-warning", //Button CSS from Bootstrap
 		},
 	],
 };
 dialogs.createDialog(props);
-
 ```
 
 ### Props
 
-| Prop                      |   Type    |                 Description                  | Default   | Version   |
-| :------------------------ | :-------: | :------------------------------------------: | :-------- | :-------- |
-| type                      | `string`  |           Overlay, Prompt or Alert           | alert     | v1.0.1    |
-| titlebar                  | `string`  |    Text shown in the title bar of dialog     | "Title"   | v1.0.1    |
-| cssclass                  | `string`  |     css class that needs to be assigned      | -         | v1.0.1    |
-| message                   | `string`  |           Message to be displayed            | "Message" | v1.0.1    |
-| defaultvalue              | `string`  |     Default value assigned to the control    | -         | v1.0.4    |
-| fullscreen                | `boolean` |    Does the dialog needs to be fullscreen    | false     | v1.0.1    |
-| buttons                   |  `JSON`   |               JSON List array                | -         | v1.0.1    |
-| buttons: label            | `string`  |             Label of the button              | "Ok"      | v1.0.1    |
-| buttons: callbackfunction[] |  `func` | array of functions to call when on click     | close     | v1.0.4    |
-| buttons: focus            | `boolean` | The button to focus, when multiple last one  | false     | v1.0.1    |
-| overlay: title            | `string`  |                   h3 title                   | "Title"   | v1.0.1    |
-| overlay: help             | `string`  |             Help text in purple              | null      | v1.0.1    |
-| overlay: form             |  `JSON`   |       Container of other form controls       | null      | v1.0.1    |
-| form: type                | `string`  | Controls viz. label, input, select, textarea | -         | v1.0.1    |
-| label: caption            | `string`  |             Caption of the label             | -         | v1.0.1    |
-| input: placeholder        | `string`  |               Placeholder text               | null      | v1.0.1    |
-| input: inputtype          | `string`  |       All acceptable HTML input types        | -         | v1.0.1    |
-| textarea: rows            | `integer` |        Number of rows in the textarea        | -         | v1.0.1    |
+| Prop                        |   Type    |                 Description                  | Default   | Version |
+| :-------------------------- | :-------: | :------------------------------------------: | :-------- | :------ |
+| type                        | `string`  |           Overlay, Prompt or Alert           | alert     | v1.0.1  |
+| titlebar                    | `string`  |    Text shown in the title bar of dialog     | "Title"   | v1.0.1  |
+| cssclass                    | `string`  |     css class that needs to be assigned      | -         | v1.0.1  |
+| message                     | `string`  |           Message to be displayed            | "Message" | v1.0.1  |
+| defaultvalue                | `string`  |    Default value assigned to the control     | -         | v1.0.4  |
+| fullscreen                  | `boolean` |    Does the dialog needs to be fullscreen    | false     | v1.0.1  |
+| buttons                     |  `JSON`   |               JSON List array                | -         | v1.0.1  |
+| buttons: label              | `string`  |             Label of the button              | "Ok"      | v1.0.1  |
+| buttons: callbackfunction[] |  `func`   |   array of functions to call when on click   | close     | v1.0.4  |
+| buttons: focus              | `boolean` | The button to focus, when multiple last one  | false     | v1.0.1  |
+| overlay: title              | `string`  |                   h3 title                   | "Title"   | v1.0.1  |
+| overlay: help               | `string`  |             Help text in purple              | null      | v1.0.1  |
+| overlay: form               |  `JSON`   |       Container of other form controls       | null      | v1.0.1  |
+| form: type                  | `string`  | Controls viz. label, input, select, textarea | -         | v1.0.1  |
+| label: caption              | `string`  |             Caption of the label             | -         | v1.0.1  |
+| input: placeholder          | `string`  |               Placeholder text               | null      | v1.0.1  |
+| input: inputtype            | `string`  |       All acceptable HTML input types        | -         | v1.0.1  |
+| textarea: rows              | `integer` |        Number of rows in the textarea        | -         | v1.0.1  |
 
 ### Styling
 
@@ -164,6 +167,6 @@ Released under the [Mit License](https://opensource.org/licenses/MIT)
 	<img src="https://github.com/raw-codes/raw-dialogs/blob/master/images/raw-dialogs.gif" />
 </p>
 
-
 ## Example
+
 https://github.com/raw-codes/raw-dialogs/tree/master/example
