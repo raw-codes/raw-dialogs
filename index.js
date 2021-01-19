@@ -1,4 +1,5 @@
 const electron = require("electron");
+const { param } = require("jquery");
 
 let cs, ov, ovb, frm;
 
@@ -12,7 +13,7 @@ exports.createDialog = function (
 			{
 				label: "Ok",
 				cssclass: "btn, btn-primary",
-				callbackfunction: [closeOverlay]
+				callbackfunction: [{ name: closeOverlay }],
 			},
 		],
 	}
@@ -29,7 +30,7 @@ exports.createDialog = function (
 		but = {
 			label: "Ok",
 			cssclass: "btn, btn-primary",
-			callbackfunction: [closeOverlay],
+			callbackfunction: [{ name: closeOverlay }],
 		};
 		props.buttons[0] = but;
 	}
@@ -82,7 +83,11 @@ exports.createDialog = function (
 		ovtb.style.paddingLeft = "10px";
 		ovtb.style.height = "30px";
 		ovtb.style.lineHeight = "30px";
-		ovtb.style.textAlign = "center";
+		// ovtb.style.textAlign = "center";
+		ovtb.style.position = "sticky";
+		ovtb.style.top = "0px";
+		ovtb.style.backgroundColor = "#00598a";
+		ovtb.style.color = "white";
 		ovtb.style.boxShadow = "0px 1px 2px 0px black";
 		ovtb.innerHTML = props.titlebar;
 		ovc.appendChild(ovtb);
@@ -163,19 +168,27 @@ exports.createDialog = function (
 				let frmC = props.form.controls;
 				for (let i = 0; i < frmC.length; i++) {
 					let nc = document.createElement(frmC[i].type.toUpperCase());
+					nc.id =
+						frmC[i].id === undefined
+							? "rov-" + frmC[i].type + "-" + i
+							: frmC[i].id; //v1.0.7
 					switch (frmC[i].type.toLowerCase()) {
+						// case "span", "div", "p":
+
 						case "label":
-							nc.innerText = frmC[i].caption;
+							nc.innerHTML = frmC[i].caption; //v1.0.7
 							break;
 						case "input":
 							nc.type = frmC[i].inputtype;
 							nc.placeholder =
 								frmC[i].placeholder !== undefined ? frmC[i].placeholder : "";
-							nc.value = frmC[i].defaultvalue !== undefined ? frmC[i].defaultvalue : ""	//v1.0.5
+							nc.value =
+								frmC[i].defaultvalue !== undefined ? frmC[i].defaultvalue : ""; //v1.0.5
 							break;
 						case "select":
+							let dv =
+								frmC[i].defaultvalue !== undefined ? frmC[i].defaultvalue : ""; //v1.0.5
 							if (frmC[i].options !== undefined) {
-								let dv = frmC[i].defaultvalue !== undefined ? frmC[i].defaultvalue : ""; //v1.0.5
 								if (frmC[i].options.trim() !== "") {
 									let ov =
 										frmC[i].values !== undefined
@@ -184,19 +197,24 @@ exports.createDialog = function (
 									frmC[i].options.split(",").map((cc, index) => {
 										let opt = document.createElement("OPTION");
 										opt.innerHTML = cc.trim();
-										opt.selected = dv.trim() === cc.trim() ? true : false
+										opt.selected = dv.trim() === cc.trim() ? true : false;
 										opt.value = ov[index] === undefined ? "" : ov[index].trim();
 										nc.appendChild(opt);
 									});
 								}
 							}
+							// frmC[i].value = dv;
 							break;
 						case "textarea":
 							nc.rows = frmC[i].rows;
 							nc.placeholder = frmC[i].placeholder;
+							nc.value =
+								frmC[i].defaultvalue !== undefined ? frmC[i].defaultvalue : ""; //v1.0.5
 							break;
 						default:
-							console.error("unexpected control type");
+							nc.innerHTML = frmC[i].caption; //v1.0.7
+							// console.error("unexpected control type");
+							break;
 					}
 					if (frmC[i].cssclass !== undefined) {
 						frmC[i].cssclass.trim() !== ""
@@ -215,6 +233,15 @@ exports.createDialog = function (
 						nc.style.border = "1px solid #ced4da";
 						nc.style.transition =
 							"border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out";
+					}
+					//v1.0.7 - Adding inline styling to the control.
+					if (frmC[i].style !== undefined) {
+						frmC[i].style.split(";").map((es) => {
+							if (es.trim() !== "") {
+								ses = es.split(":");
+								nc.style.setProperty(ses[0].trim(), ses[1].trim(), "important");
+							}
+						});
 					}
 					frm.appendChild(nc);
 				}
@@ -235,14 +262,14 @@ exports.createDialog = function (
 		let ip = document.createElement("INPUT");
 		ip.setAttribute("id", "prompt-value");
 		//v1.0.5
-		ip.placeholder = props.placeholder !== undefined ? props.placeholder : ""
-		ip.value = props.defaultvalue !== undefined ? props.defaultvalue : ""
-		
+		ip.placeholder = props.placeholder !== undefined ? props.placeholder : "";
+		ip.value = props.defaultvalue !== undefined ? props.defaultvalue : "";
+
 		ip.style.display = "block";
 		ip.style.width = "100%";
 		ip.style.padding = "2px 2px";
 		ip.style.lineHeight = "1.5";
-		ip.style.margin = "20px 0px 20px 0px"	//v1.0.5
+		ip.style.margin = "20px 0px 20px 0px"; //v1.0.5
 		ovb.appendChild(ip);
 	}
 
@@ -279,11 +306,21 @@ exports.createDialog = function (
 		}
 		btn.innerText = btns[i].label;
 		btn.addEventListener("click", function (event) {
-			// btns[i].callbackfunction()	
+			// btns[i].callbackfunction()
 			//Multiple function call introduced in v1.0.5
-			btns[i].callbackfunction.map(funct => {
-				funct() 
-			})
+			btns[i].callbackfunction.map((funct) => {
+				//function call with parameters
+
+				if (funct.params !== undefined) {
+					let params = funct.params; // !== undefined ? funct.params.split(",") : ""
+					funct.name.apply(
+						funct.name,
+						params.length > 1 ? params.slice(params, params.length) : params
+					);
+				} else {
+					funct.name();
+				}
+			});
 		});
 		if (btns[i].focus) focusbtn = btn.id;
 		ovbc.appendChild(btn);
