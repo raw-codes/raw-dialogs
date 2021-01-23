@@ -4,7 +4,7 @@
 		.centerize {
 			display: flex;
 			flex-direction: column;
-			height: 80vh;
+			height: 90vh;
 			justify-content: space-between;
 			align-items: center;
 		}
@@ -36,6 +36,8 @@
 			<button id="btn_overlay" class="btn">Overlay</button>
 			<button id="btn_alert" class="btn">Alert</button>
 			<button id="btn_prompt" class="btn">Prompt</button>
+			<button id="btn_image" class="btn">Image</button>
+			<button id="btn_table" class="btn">Table</button>
 		</div>
 
 		<div class="centerize" style="justify-content: center">
@@ -70,6 +72,8 @@
 	</div>
 	<script>
 		const dialog = require("raw-dialogs");
+		const fs = require("fs");
+		const path = require("path");
 
 		function alertMessage() {
 			alert("Message back OK");
@@ -84,7 +88,7 @@
 			.addEventListener("click", function () {
 				let props = {
 					type: "overlay",
-					titlebar: "Sample Application",
+					titlebar: "raw-dialogs",
 					title: "Add New Client Information",
 					fullscreen: false,
 					help:
@@ -131,14 +135,14 @@
 					buttons: [
 						{
 							label: "Ok",
-							callbackfunction: alertMessage,
+							callbackfunction: [{ name: alertMessage }],
 							cssclass: "ov-button-normal",
 						},
 
 						{
 							label: "Cancel",
 							focus: true,
-							callbackfunction: alertMessage1,
+							callbackfunction: [{ name: alertMessage1 }],
 							cssclass: "ov-button-danger",
 						},
 					],
@@ -150,7 +154,7 @@
 		document.getElementById("btn_alert").addEventListener("click", function () {
 			let props = {
 				type: "alert",
-				titlebar: "Sample Application",
+				titlebar: "raw-dialogs",
 				message:
 					"<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>",
 				buttons: [
@@ -184,5 +188,64 @@
 
 				dialog.createDialog(props);
 			});
+
+		document.getElementById("btn_image").addEventListener("click", () => {
+			let div = document.createElement("div");
+			let img = document.createElement("img");
+			img.src = "./images/dialog.jpg";
+			div.appendChild(img);
+
+			let props = {
+				message: div.innerHTML,
+			};
+
+			dialog.createDialog(props);
+		});
+
+		document.getElementById("btn_table").addEventListener("click", () => {
+			tabledata();
+		});
+
+		function tabledata() {
+			let rawdata = fs.readFileSync(path.resolve(__dirname, "data/data.json"));
+			let result = JSON.parse(rawdata);
+
+			let tblh = document.createElement("DIV");
+			let tbl = document.createElement("table");
+			tbl.classList.add("table", "table-sm", "table-striped");
+			tbl.id = "tbl-data-for-import";
+			let th = document.createElement("THEAD");
+
+			let oks = Object.keys(result);
+			let colH = Object.values(result[oks[0]][0]);
+
+			let thtr = document.createElement("TR");
+			for (let i = 0; i < colH.length; i++) {
+				let thth = document.createElement("TH");
+				thth.innerHTML = colH[i];
+				thtr.appendChild(thth);
+			}
+			th.appendChild(thtr);
+			tbl.appendChild(th);
+
+			let tb = document.createElement("TBODY");
+			for (let k = 2; k < result[oks[0]].length; k++) {
+				let tbtr = document.createElement("TR");
+				let rowD = Object.values(result[oks[0]][k]);
+				for (let i = 0; i < rowD.length; i++) {
+					let tbtb = document.createElement("TD");
+					tbtb.innerHTML = rowD[i];
+					tbtr.appendChild(tbtb);
+				}
+				tb.appendChild(tbtr);
+			}
+			tbl.appendChild(tb);
+			tblh.appendChild(tbl);
+
+			dialog.createDialog({
+				titlebar: "Data to Import",
+				message: tblh.innerHTML,
+			});
+		}
 	</script>
 </body>

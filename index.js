@@ -1,35 +1,36 @@
 const electron = require("electron");
+const { param } = require("jquery");
 
-let cs, ov, ovb, frm;
+let cs, ov, ovb, ovtb, frm;
 
 exports.createDialog = function (
 	props = {
 		type: "alert",
-		title: "Sample Title",
-		help: "Sample help text",
-		message: "Sample Message",
+		titlebar: "raw-dialogs Title",
+		help: "raw-dialogs help text",
+		message: "raw-dialogs Message",
 		buttons: [
 			{
 				label: "Ok",
 				cssclass: "btn, btn-primary",
-				callbackfunction: closeOverlay,
+				callbackfunction: [{ name: closeOverlay }],
 			},
 		],
 	}
 ) {
-	console.log(props);
+	// console.log(props);
 
 	//set defaults
 	if (props.type === undefined) props.type = "alert";
-	if (props.title === undefined) props.title = "Title";
-	if (props.help === undefined) props.help = "Help";
-	if (props.message === undefined) props.message = "Message";
+	if (props.titlebar === undefined) props.titlebar = "raw-dialogs Title";
+	if (props.help === undefined) props.help = "raw-dialogs Help";
+	if (props.message === undefined) props.message = "raw-dialogs Message";
 	if (props.buttons === undefined) {
 		props.buttons = [{}];
 		but = {
 			label: "Ok",
 			cssclass: "btn, btn-primary",
-			callbackfunction: closeOverlay,
+			callbackfunction: [{ name: closeOverlay }],
 		};
 		props.buttons[0] = but;
 	}
@@ -43,7 +44,6 @@ exports.createDialog = function (
 	cs.style.height = "100%";
 	cs.style.width = "100%";
 	cs.style.background = "rgba(0, 0, 0, 0.5)";
-	// cs.classList.add("cover-screen");
 	if (props.fullscreen) {
 		cs.style.backgroundColor = "white";
 	}
@@ -65,7 +65,6 @@ exports.createDialog = function (
 			props.type.trim().toLowerCase() === "overlay" ? "50vh;" : "10vh";
 		ov.style.boxShadow = "1px 1px 10px 0px black";
 		ov.style.overflow = "hidden";
-		// ov.classList.add(props.type === "overlay" ? "overlay" : "alert");
 	}
 
 	let ovc = document.createElement("DIV");
@@ -76,24 +75,28 @@ exports.createDialog = function (
 			: "alert" + "-container"
 	);
 
-	if (props.titlebar !== undefined) {
-		let ovtb = document.createElement("DIV");
-		// ovtb.classList.add("overlay-title-bar", "noselect");
+	if (props.titlebar !== "") {
+		ovtb = document.createElement("DIV");
 		ovtb.style.backgroundColor = "#b7b7b4";
 		ovtb.style.color = "black";
 		ovtb.style.padding = "2px";
 		ovtb.style.paddingLeft = "10px";
 		ovtb.style.height = "30px";
 		ovtb.style.lineHeight = "30px";
-		ovtb.style.textAlign = "center";
+		// ovtb.style.textAlign = "center";
+		ovtb.style.position = "sticky";
+		ovtb.style.top = "0px";
+		ovtb.style.backgroundColor = "#00598a";
+		ovtb.style.color = "white";
 		ovtb.style.boxShadow = "0px 1px 2px 0px black";
+		ovtb.style.webKitAppRegion = "drag"; //v1.0.8
 		ovtb.innerHTML = props.titlebar;
+		ovtb.style.cursor = "move";
 		ovc.appendChild(ovtb);
 	}
 
 	let ttr = document.createElement("DIV");
 	ttr.setAttribute("id", "triangle-top-right");
-	// ttr.classList.add("triangle-top-right");
 	ttr.style.width = "0px";
 	ttr.style.borderTop = "30px solid orange";
 	ttr.style.borderLeft = "40px solid transparent";
@@ -104,7 +107,6 @@ exports.createDialog = function (
 	let xmlns = "http://www.w3.org/2000/svg";
 	let svgElem = document.createElementNS(xmlns, "svg");
 	svgElem.setAttributeNS(null, "viewBox", "0 0 350 350");
-	// svgElem.classList.add("ov-close-x");
 	svgElem.style.position = "fixed";
 	svgElem.style.right = "5px";
 	svgElem.style.top = "5px";
@@ -128,7 +130,6 @@ exports.createDialog = function (
 	if (props.type.trim().toLowerCase() === "overlay") {
 		let ovt = document.createElement("h3");
 		ovt.setAttribute("id", "overlay-title");
-		// ovt.classList.add("overlay-title", "noselect");
 		//overlay-title
 		ovt.style.padding = "0px 0px 0px 10px";
 		ovt.style.borderBottom = "2px solid orange";
@@ -140,25 +141,14 @@ exports.createDialog = function (
 		ovt.style.userDelect = "none";
 		ovc.appendChild(ovt);
 
-		// let re = document.createElement("SPAN");
-		// re.classList.add("roundedElement");
-		// ovc.appendChild(re);
-
 		let ovh = document.createElement("DIV");
 		ovh.setAttribute("id", "overlay-help");
-		// ovh.classList.add("overlay-help");
 		ovh.style.fontStyle = "italic";
 		ovh.style.fontSize = "x-small";
 		ovh.style.marginLeft = "20px";
 		ovh.style.color = "magenta";
 		ovh.style.width = "70%";
 		ovh.style.borderBottom = "1px dashed gray";
-
-		// let infoIcon = document.createElement("I");
-		// infoIcon.classList.add("fas", "fa-info-circle", "fa-fw");
-		// infoIcon.style.color = "black";
-		// infoIcon.style.marginRight = "5px";
-		// ovh.appendChild(infoIcon);
 
 		let textNode = document.createElement("TEXT");
 		textNode.innerText = props.help;
@@ -177,20 +167,29 @@ exports.createDialog = function (
 						? form.cssclass.split(",").map((cc) => frm.classList.add(cc.trim()))
 						: "";
 				}
-				// frm.style.padding = "20px";
 				let frmC = props.form.controls;
 				for (let i = 0; i < frmC.length; i++) {
 					let nc = document.createElement(frmC[i].type.toUpperCase());
+					nc.id =
+						frmC[i].id === undefined
+							? "rov-" + frmC[i].type + "-" + i
+							: frmC[i].id; //v1.0.7
 					switch (frmC[i].type.toLowerCase()) {
+						// case "span", "div", "p":
+
 						case "label":
-							nc.innerText = frmC[i].caption;
+							nc.innerHTML = frmC[i].caption; //v1.0.7
 							break;
 						case "input":
 							nc.type = frmC[i].inputtype;
 							nc.placeholder =
 								frmC[i].placeholder !== undefined ? frmC[i].placeholder : "";
+							nc.value =
+								frmC[i].defaultvalue !== undefined ? frmC[i].defaultvalue : ""; //v1.0.5
 							break;
 						case "select":
+							let dv =
+								frmC[i].defaultvalue !== undefined ? frmC[i].defaultvalue : ""; //v1.0.5
 							if (frmC[i].options !== undefined) {
 								if (frmC[i].options.trim() !== "") {
 									let ov =
@@ -200,18 +199,24 @@ exports.createDialog = function (
 									frmC[i].options.split(",").map((cc, index) => {
 										let opt = document.createElement("OPTION");
 										opt.innerHTML = cc.trim();
+										opt.selected = dv.trim() === cc.trim() ? true : false;
 										opt.value = ov[index] === undefined ? "" : ov[index].trim();
 										nc.appendChild(opt);
 									});
 								}
 							}
+							// frmC[i].value = dv;
 							break;
 						case "textarea":
 							nc.rows = frmC[i].rows;
 							nc.placeholder = frmC[i].placeholder;
+							nc.value =
+								frmC[i].defaultvalue !== undefined ? frmC[i].defaultvalue : ""; //v1.0.5
 							break;
 						default:
-							console.error("unexpected control type");
+							nc.innerHTML = frmC[i].caption; //v1.0.7
+							// console.error("unexpected control type");
+							break;
 					}
 					if (frmC[i].cssclass !== undefined) {
 						frmC[i].cssclass.trim() !== ""
@@ -231,6 +236,15 @@ exports.createDialog = function (
 						nc.style.transition =
 							"border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out";
 					}
+					//v1.0.7 - Adding inline styling to the control.
+					if (frmC[i].style !== undefined) {
+						frmC[i].style.split(";").map((es) => {
+							if (es.trim() !== "") {
+								ses = es.split(":");
+								nc.style.setProperty(ses[0].trim(), ses[1].trim(), "important");
+							}
+						});
+					}
 					frm.appendChild(nc);
 				}
 				frm.style.marginBottom = "10px";
@@ -240,7 +254,6 @@ exports.createDialog = function (
 
 	ovb = document.createElement("DIV");
 	ovb.setAttribute("id", "overlay-body");
-	// ovb.classList.add("overlay-body");
 	ovb.style.padding = "10px";
 	ovb.style.margin = "0px 2px 40px 10px";
 	ovb.style.maxHeight = "80vh";
@@ -250,11 +263,15 @@ exports.createDialog = function (
 	if (props.type.trim().toLowerCase() === "prompt") {
 		let ip = document.createElement("INPUT");
 		ip.setAttribute("id", "prompt-value");
-		// ip.classList.add("ov-form-controls");
+		//v1.0.5
+		ip.placeholder = props.placeholder !== undefined ? props.placeholder : "";
+		ip.value = props.defaultvalue !== undefined ? props.defaultvalue : "";
+
 		ip.style.display = "block";
 		ip.style.width = "100%";
 		ip.style.padding = "2px 2px";
 		ip.style.lineHeight = "1.5";
+		ip.style.margin = "20px 0px 20px 0px"; //v1.0.5
 		ovb.appendChild(ip);
 	}
 
@@ -267,13 +284,11 @@ exports.createDialog = function (
 
 	let ovbc = document.createElement("DIV");
 	ovbc.setAttribute("id", "ov-button-container");
-	// ovbc.classList.add("ov-button-container");
 	ovbc.style.display = "flex";
 	ovbc.style.padding = "5px 0px 5px 0px";
 	ovbc.style.bottom = "0px";
 	ovbc.style.position = "fixed";
 	ovbc.style.width = "100%";
-	ovbc.style.boxShadow = "0px 1px 5px 0px black";
 	ovbc.style.backgroundColor = "white";
 
 	let btns = props.buttons;
@@ -283,15 +298,9 @@ exports.createDialog = function (
 	for (let i = 0; i < btns.length; i++) {
 		let btn = document.createElement("BUTTON");
 		btn.setAttribute("id", "ov-button-" + btns[i].label);
-		// btn.classList.add("ov-button");
 		btn.style.minWidth = "50px";
 		btn.style.lineHeight = "1.5";
-		// btn.style.color = "black";
-		// btn.style.backgroundColor = "#b7b7b4";
-		// btn.style.border = "1px solid #b7b7b4";
-		// btn.style.padding = "2px 10px 2px 10px";
 		btn.style.margin = "1px 5px 1px 5px";
-		// btn.style.boxShadow = "0px 1px 2px 0px";
 		if (btns[i].cssclass !== undefined) {
 			btns[i].cssclass.trim() !== ""
 				? btns[i].cssclass.split(",").map((cc) => btn.classList.add(cc.trim()))
@@ -299,7 +308,21 @@ exports.createDialog = function (
 		}
 		btn.innerText = btns[i].label;
 		btn.addEventListener("click", function (event) {
-			btns[i].callbackfunction();
+			// btns[i].callbackfunction()
+			//Multiple function call introduced in v1.0.5
+			btns[i].callbackfunction.map((funct) => {
+				//function call with parameters
+
+				if (funct.params !== undefined) {
+					let params = funct.params; // !== undefined ? funct.params.split(",") : ""
+					funct.name.apply(
+						funct.name,
+						params.length > 1 ? params.slice(params, params.length) : params
+					);
+				} else {
+					funct.name();
+				}
+			});
 		});
 		if (btns[i].focus) focusbtn = btn.id;
 		ovbc.appendChild(btn);
@@ -325,9 +348,57 @@ exports.createDialog = function (
 			)
 			.focus();
 	}
+
+	dragElement(ov);
 };
 
 closeOverlay = function () {
-	// alert("close overlay");
 	document.getElementById("overlay-cover").remove();
 };
+
+function dragElement(elem) {
+	let pos1 = 0,
+		pos2 = 0,
+		pos3 = 0,
+		pos4 = 0;
+	if (document.getElementById(elem.id + "header")) {
+		/* if present, the header is where you move the DIV from:*/
+		document.getElementById(elem.id + "header").onmousedown = dragMouseDown;
+	} else {
+		/* otherwise, move the DIV from anywhere inside the DIV:*/
+		elem.onmousedown = dragMouseDown;
+	}
+
+	function dragMouseDown(e) {
+		if (e.target.style.cursor === "move") {
+			e = e || window.event;
+			e.preventDefault();
+			// get the mouse cursor position at startup:
+
+			pos3 = e.clientX;
+			pos4 = e.clientY;
+			document.onmouseup = closeDragElement;
+			// call a function whenever the cursor moves:
+			document.onmousemove = elementDrag;
+		}
+	}
+
+	function elementDrag(e) {
+		e = e || window.event;
+		e.preventDefault();
+		// calculate the new cursor position:
+		pos1 = pos3 - e.clientX;
+		pos2 = pos4 - e.clientY;
+		pos3 = e.clientX;
+		pos4 = e.clientY;
+		// set the element's new position:
+		elem.style.top = elem.offsetTop - pos2 + "px";
+		elem.style.left = elem.offsetLeft - pos1 + "px";
+	}
+
+	function closeDragElement() {
+		/* stop moving when mouse button is released:*/
+		document.onmouseup = null;
+		document.onmousemove = null;
+	}
+}
