@@ -195,11 +195,12 @@
 			img.src = "./images/dialog.jpg";
 			div.appendChild(img);
 
-			let props = {
-				message: div.innerHTML,
-			};
+			// let props = {
+			// 	message: div.innerHTML,
+			// };
 
-			dialog.createDialog(props);
+			// dialog.createDialog(props);
+			dialog.prompt(div.innerHTML);
 		});
 
 		document.getElementById("btn_table").addEventListener("click", () => {
@@ -242,10 +243,11 @@
 			tbl.appendChild(tb);
 			tblh.appendChild(tbl);
 
-			dialog.createDialog({
-				titlebar: "Data to Import",
-				message: tblh.innerHTML,
-			});
+			dialog.alert(tblh.innerHTML);
+			// dialog.createDialog({
+			// 	titlebar: "Data to Import",
+			// 	message: tblh.innerHTML,
+			// });
 		}
 	</script>
 </body>

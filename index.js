@@ -1,12 +1,39 @@
-const electron = require("electron");
-const { param } = require("jquery");
-
 let cs, ov, ovb, ovtb, frm;
+
+exports.alert = function (props) {
+	if (props === undefined) {
+		if (props.type === undefined) {
+			props = {};
+			// props["type"] = "alert"
+		}
+	} else {
+		let aprops = props;
+		props = {};
+		// props["type"] = "alert"
+		props["message"] = aprops;
+	}
+	this.createDialog(props);
+};
+
+exports.prompt = function (props) {
+	if (props === undefined) {
+		if (props.type === undefined) {
+			props = {};
+			props["type"] = "prompt";
+		}
+	} else {
+		let aprops = props;
+		props = {};
+		props["type"] = "prompt";
+		props["message"] = aprops;
+	}
+	this.createDialog(props);
+};
 
 exports.createDialog = function (
 	props = {
 		type: "alert",
-		titlebar: "raw-dialogs Title",
+		// titlebar: "raw-dialogs title (to change include [titlebar])",
 		help: "raw-dialogs help text",
 		message: "raw-dialogs Message",
 		buttons: [
@@ -18,11 +45,8 @@ exports.createDialog = function (
 		],
 	}
 ) {
-	// console.log(props);
-
 	//set defaults
 	if (props.type === undefined) props.type = "alert";
-	if (props.titlebar === undefined) props.titlebar = "raw-dialogs Title";
 	if (props.help === undefined) props.help = "raw-dialogs Help";
 	if (props.message === undefined) props.message = "raw-dialogs Message";
 	if (props.buttons === undefined) {
@@ -61,8 +85,10 @@ exports.createDialog = function (
 		ov.style.borderBottom = "5px solid #038ad8 !important";
 		ov.style.backgroundColor = "white";
 		ov.style.minWidth = "50vw";
+		ov.style.maxWidth = "90vw";
 		ov.style.minHeight =
 			props.type.trim().toLowerCase() === "overlay" ? "50vh;" : "10vh";
+		ov.style.maxHeight = "90vh";
 		ov.style.boxShadow = "1px 1px 10px 0px black";
 		ov.style.overflow = "hidden";
 	}
@@ -75,14 +101,15 @@ exports.createDialog = function (
 			: "alert" + "-container"
 	);
 
-	if (props.titlebar !== "") {
+	if (props.titlebar !== undefined) {
 		ovtb = document.createElement("DIV");
-		ovtb.style.backgroundColor = "#b7b7b4";
-		ovtb.style.color = "black";
+		// ovtb.style.backgroundColor = "#b7b7b4";
+		// ovtb.style.color = "black";
 		ovtb.style.padding = "2px";
 		ovtb.style.paddingLeft = "10px";
 		ovtb.style.height = "30px";
 		ovtb.style.lineHeight = "30px";
+		ovtb.style.fontWeight = "bold";
 		// ovtb.style.textAlign = "center";
 		ovtb.style.position = "sticky";
 		ovtb.style.top = "0px";
@@ -90,8 +117,8 @@ exports.createDialog = function (
 		ovtb.style.color = "white";
 		ovtb.style.boxShadow = "0px 1px 2px 0px black";
 		ovtb.style.webKitAppRegion = "drag"; //v1.0.8
-		ovtb.innerHTML = props.titlebar;
 		ovtb.style.cursor = "move";
+		ovtb.innerHTML = props.titlebar;
 		ovc.appendChild(ovtb);
 	}
 
