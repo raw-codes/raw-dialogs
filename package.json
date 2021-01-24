@@ -1,6 +1,6 @@
 {
 	"name": "raw-dialogs",
-	"version": "1.0.4",
+	"version": "1.0.7",
 	"description": "Package for creating Overlays, Prompts, and Alerts using vanilla JS",
 	"main": "index.js",
 	"scripts": {
