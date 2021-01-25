@@ -28,20 +28,38 @@ $ npm i raw-dialogs --save
 ```javascript
 const dialogs = require("raw-dialogs");
 
-//To create a simple alert set the props (JSON format) and pass it to createDialog() method
+//***NEW Methods ****
+//Creates a simple alert with message,
+dialog.alert("message"); 				//unmovable alert.
+dialog.alert("message", "titlebar"); 	//alert movable.
+dialog.alert("message", "titlebar", "button-label"); //label the button.
+dialog.alert("message", "titlebar", callbackfunction); //function to be called when button clicked.
+dialog.alert("message", "titlebar", "button-label", callbackfunction); //label the button and call function.
+
+//Creates prompt
+dialog.prompt("message"); 				//unmovable alert.
+dialog.prompt("message", "titlebar"); 	//alert movable.
+dialog.prompt("message", "titlebar", "button-label"); //label the button.
+dialog.prompt("message", "titlebar", callbackfunction); //function to be called when button clicked.
+dialog.prompt("message", "titlebar", "button-label", callbackfunction); //label the button and call function.
+
+
+//To create alert set the props (JSON format) and pass it to createDialog() method
 let props = {
 	type: "alert",
 	titlebar: "Alerting Application",
-	cssclass: "form-controls",
 	message: "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>",
+	defaultvalue: "Default Value",
 	buttons: [
 		{
-			label: "Ok",
-			callbackfunction: [{name : alertMessage}, {name: alertMessage1, params:[{param1, param2}]}],
-			cssclass: "btn, btn-primary", //CSS from Bootstrap
-		},
-	],
-};
+			label: "Enter your name and click proceed",
+			callbackfunction: [
+				{ name: "alertMessage", params: ["param1", "param2"] },
+				{ name: "alertMessage1" }
+			]
+		}
+	]
+}
 dialogs.createDialog(props);
 
 /*To create a simple Prompt set the props (JSON format) and pass it to createDialog() method
@@ -54,9 +72,12 @@ let props = {
 	buttons: [
 		{
 			label: "Enter your name and click proceed",
-			callbackfunction: [{name: alertMessage, params: [{ param1 }]],
-		},
-	],
+			callbackfunction: [
+				{ name: "alertMessage", params: ["param1", "param2"] },
+				{ name: "alertMessage1" }
+			]
+		}
+	]
 };
 dialogs.createDialog(props);
 
@@ -76,6 +97,7 @@ let props = {
 			{
 				type: "label",
 				caption: "Name",
+				style: "color: red; font-weight: bold",
 			},
 			{
 				type: "input",
@@ -86,6 +108,7 @@ let props = {
 			{
 				type: "label",
 				caption: "Age",
+				style: "color: blue; font-weight: bold",
 			},
 			{
 				type: "select",
@@ -97,6 +120,7 @@ let props = {
 			{
 				type: "label",
 				caption: "Address",
+				style: "color: gray; font-weight: bold",
 			},
 			{
 				type: "textarea",
@@ -115,7 +139,10 @@ let props = {
 		},
 		{
 			label: "Cancel",
-			callbackfunction: [{name: alertMessage1, params: [{param1, param2}], {name: alertMessage}],
+			callbackfunction: [
+				{name: alertMessage1, params: [param1, param2],
+				{name: alertMessage}
+			],
 			cssclass: "btn, btn-warning", //Button CSS from Bootstrap
 		},
 	],
@@ -125,35 +152,39 @@ dialogs.createDialog(props);
 
 ### Props
 
-| Prop                                                                                |   Type    |                 Description                  | Default   | Version |
-| :---------------------------------------------------------------------------------- | :-------: | :------------------------------------------: | :-------- | :------ |
-| type                                                                                | `string`  |           Overlay, Prompt or Alert           | alert     | v1.0.1  |
-| id                                                                                  | `string`  |                DOM Element ID                | alert     | v1.0.7  |
-| titlebar                                                                            | `string`  |    Text shown in the title bar of dialog     | "Title"   | v1.0.1  |
-| cssclass                                                                            | `string`  |     css class that needs to be assigned      | -         | v1.0.1  |
-| style                                                                               | `string`  |   inline style string separated by commas    | -         | v1.0.7  |
-| message                                                                             | `string`  |           Message to be displayed            | "Message" | v1.0.1  |
-| defaultvalue                                                                        | `string`  |    Default value assigned to the control     | -         | v1.0.4  |
-| fullscreen                                                                          | `boolean` |    Does the dialog needs to be fullscreen    | false     | v1.0.1  |
-| buttons                                                                             |  `JSON`   |               JSON List array                | -         | v1.0.1  |
-| buttons: label                                                                      | `string`  |             Label of the button              | "Ok"      | v1.0.1  |
-| buttons: callbackfunction [{name: functionname, {params: [{param1, ...,paramX}] } } |  `array`  |   array of functions to call when on click   | close     | v1.0.7  |
-| buttons: focus                                                                      | `boolean` | The button to focus, when multiple last one  | false     | v1.0.1  |
-| overlay: title                                                                      | `string`  |                   h3 title                   | "Title"   | v1.0.1  |
-| overlay: help                                                                       | `string`  |             Help text in purple              | null      | v1.0.1  |
-| overlay: form                                                                       |  `JSON`   |       Container of other form controls       | null      | v1.0.1  |
-| form: type                                                                          | `string`  | Controls viz. label, input, select, textarea | -         | v1.0.1  |
-| label: caption                                                                      | `string`  |             Caption of the label             | -         | v1.0.1  |
-| input: placeholder                                                                  | `string`  |               Placeholder text               | null      | v1.0.1  |
-| input: inputtype                                                                    | `string`  |       All acceptable HTML input types        | -         | v1.0.1  |
-| textarea: rows                                                                      | `integer` |        Number of rows in the textarea        | -         | v1.0.1  |
+| Prop                                                                              |   Type    |                 Description                  | Default   | Version |
+| :-------------------------------------------------------------------------------- | :-------: | :------------------------------------------: | :-------- | :------ |
+| type                                                                              | `string`  |           Overlay, Prompt or Alert           | alert     | v1.0.1  |
+| id                                                                                | `string`  |                DOM Element ID                | alert     | v1.0.7  |
+| titlebar                                                                          | `string`  |    Text shown in the title bar of dialog     | "Title"   | v1.0.1  |
+| cssclass                                                                          | `string`  |     css class that needs to be assigned      | -         | v1.0.1  |
+| style                                                                             | `string`  |   inline style string separated by commas    | -         | v1.0.7  |
+| message                                                                           | `string`  |           Message to be displayed            | "Message" | v1.0.1  |
+| defaultvalue                                                                      | `string`  |    Default value assigned to the control     | -         | v1.0.4  |
+| fullscreen                                                                        | `boolean` |    Does the dialog needs to be fullscreen    | false     | v1.0.1  |
+| buttons                                                                           |  `JSON`   |               JSON List array                | -         | v1.0.1  |
+| buttons: label                                                                    | `string`  |             Label of the button              | "Ok"      | v1.0.1  |
+| buttons: callbackfunction [{name: functionname, {params: [param1, ...,paramX] } } |  `array`  |   array of functions to call when on click   | close     | v1.0.7  |
+| buttons: focus                                                                    | `boolean` | The button to focus, when multiple last one  | false     | v1.0.1  |
+| overlay: title                                                                    | `string`  |                   h3 title                   | "Title"   | v1.0.1  |
+| overlay: help                                                                     | `string`  |             Help text in purple              | null      | v1.0.1  |
+| overlay: form                                                                     |  `JSON`   |       Container of other form controls       | null      | v1.0.1  |
+| form: type                                                                        | `string`  | Controls viz. label, input, select, textarea | -         | v1.0.1  |
+| label: caption                                                                    | `string`  |             Caption of the label             | -         | v1.0.1  |
+| input: placeholder                                                                | `string`  |               Placeholder text               | null      | v1.0.1  |
+| input: inputtype                                                                  | `string`  |       All acceptable HTML input types        | -         | v1.0.1  |
+| textarea: rows                                                                    | `integer` |        Number of rows in the textarea        | -         | v1.0.1  |
 
 ### Styling
 
 The class name can be passed as a string seperated by comma(,), either custom
 CSS classes created or classes from other open-source CSS frameworks (bootstrap
-etc...) v1.0.7 Introduces the inline styling. Pass the style parameters
-separated by commas.
+etc...).
+
+v1.0.7 Introduces the inline styling. Pass the style parameters separated by
+semi colon for overlay:form controls.
+
+eg. style: "color:red; font-weight: bold"
 
 ## Reachout for feedback and comments
 

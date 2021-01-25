@@ -1,33 +1,49 @@
 let cs, ov, ovb, ovtb, frm;
 
-exports.alert = function (props) {
-	if (props === undefined) {
-		if (props.type === undefined) {
-			props = {};
-			// props["type"] = "alert"
+function setDefaults() {
+	let props = {};
+	let but = [
+		{
+			label: "button1",
+			callbackfunction: [{ name: closeOverlay }],
+		},
+	];
+
+	if (arguments.length > 0) props["type"] = arguments[0];
+	if (arguments.length > 1) props["message"] = arguments[1];
+	if (arguments.length > 2) props["titlebar"] = arguments[2];
+	if (arguments.length > 3) {
+		if (typeof arguments[2] === "function") {
+			but[0].callbackfunction[0].name = arguments[3];
+		} else {
+			but[0].label = arguments[3];
 		}
-	} else {
-		let aprops = props;
-		props = {};
-		// props["type"] = "alert"
-		props["message"] = aprops;
+		props["buttons"] = but;
 	}
-	this.createDialog(props);
+
+	if (arguments.length > 4) {
+		if (typeof arguments[3] === "function") {
+			but[0].callbackfunction[0].name = arguments[3];
+		} else {
+			but[0].label = arguments[3];
+		}
+		if (typeof arguments[4] === "function") {
+			but[0].callbackfunction[0].name = arguments[4];
+		} else {
+			but[0].label = arguments[4];
+		}
+		props["buttons"] = but;
+	}
+	return props;
+}
+
+exports.alert = function () {
+	// setDefaults.apply(null, arguments)
+	this.createDialog(setDefaults("alert", ...arguments));
 };
 
-exports.prompt = function (props) {
-	if (props === undefined) {
-		if (props.type === undefined) {
-			props = {};
-			props["type"] = "prompt";
-		}
-	} else {
-		let aprops = props;
-		props = {};
-		props["type"] = "prompt";
-		props["message"] = aprops;
-	}
-	this.createDialog(props);
+exports.prompt = function () {
+	this.createDialog(setDefaults("prompt", ...arguments));
 };
 
 exports.createDialog = function (
@@ -57,6 +73,15 @@ exports.createDialog = function (
 			callbackfunction: [{ name: closeOverlay }],
 		};
 		props.buttons[0] = but;
+	} else {
+		for (let i = 0; i < props.buttons.length; i++) {
+			if (props.buttons[i].label === undefined) {
+				props.buttons[i].label = "button" + (i + 1);
+			}
+			if (props.buttons[i].callbackfunction === undefined) {
+				props.buttons[i].callbackfunction = [{ name: closeOverlay }];
+			}
+		}
 	}
 
 	cs = document.createElement("DIV");
@@ -322,8 +347,13 @@ exports.createDialog = function (
 	let focusbtn = "";
 	//use this variable to capture the button that will need foucs.
 	//If there are multiple flag, then the last one will be setfoucs
+
 	for (let i = 0; i < btns.length; i++) {
 		let btn = document.createElement("BUTTON");
+
+		console.log(btns[i].label);
+		btns[i].label = btns[i].label === undefined ? "Ok" : btns[i].label;
+
 		btn.setAttribute("id", "ov-button-" + btns[i].label);
 		btn.style.minWidth = "50px";
 		btn.style.lineHeight = "1.5";
